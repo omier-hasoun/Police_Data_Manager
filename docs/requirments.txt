@@ -1,0 +1,72 @@
+Police Data Management System – Client Requirements
+1️⃣ General Objectives
+
+Enable management of officers, cases, citizens, and evidence in an organized manner.
+
+Provide an interface to access data and perform basic operations quickly and easily.
+
+Ensure the ability to link related data (e.g., citizens to cases).
+
+2️⃣ Core Entities
+
+1. Officers
+
+Each officer has: Name, Rank, Badge Number, Station.
+
+Chief of Police – Top-level officer.
+
+Captain – Leads divisions or units.
+
+Sergeant – Supervises a team of officers.
+
+Detective – Investigates cases.
+
+Patrol Officer – Frontline officer handling daily duties.
+
+2. Cases
+
+Each case has: Title, Description, Status (Open/Closed), Assigned Officer.
+
+3. Citizens
+
+Each citizen has: Name, Contact Information, and can be linked to cases as a participant or witness.
+
+4. Evidence
+
+Each piece of evidence is linked to a case and has: Type, Description.
+
+3️⃣ Key System Functions
+
+Officer Management:
+
+Add a new officer, update officer details, delete officer, view officer list.
+
+Case Management:
+
+Create a new case, update case status, assign an officer, view all cases with search/filter options by status or officer.
+
+Citizen Management:
+
+Add a new citizen, update citizen details, delete citizen, view citizen list.
+
+Link citizens to related cases.
+
+Evidence Management:
+
+Add new evidence linked to a case, update details, delete evidence, view evidence per case.
+
+4️⃣ Reporting & Data Views
+
+View all cases with assigned officers and the number of related evidence items.
+
+View all citizens linked to each case.
+
+Ability to filter cases by status or assigned officer.
+
+5️⃣ Additional Requirements
+
+The system must be easy to use and intuitive for police personnel.
+
+Data should be properly documented and interlinked (Officer ↔ Case ↔ Citizen ↔ Evidence).
+
+Ability to add, update, and delete records easily.
