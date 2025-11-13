@@ -1,5 +1,3 @@
-using DotNetEnv;
-using DotNetEnv.Extensions;
 using Microsoft.Data.SqlClient;
 
 namespace API.Config;
