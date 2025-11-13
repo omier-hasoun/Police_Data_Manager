@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-var connString = new ConnectionStringReader().GetConnectionString();
+var connString = DatabaseConnectionStringProvider.GetRequired(builder.Configuration);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -42,6 +42,8 @@ builder.Services.AddAuthentication(options =>
 
     };
 });
+
+
 
 var app = builder.Build();
 
