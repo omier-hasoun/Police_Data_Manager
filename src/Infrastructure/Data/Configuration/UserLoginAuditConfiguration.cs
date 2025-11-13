@@ -2,9 +2,9 @@ using Domain.Users;
 
 namespace Infrastructure.Data.Configuration;
 
-public class UserLoginAuditConfiguration : IEntityTypeConfiguration<UserLoginAudit>
+public class UserLoginLogConfiguration : IEntityTypeConfiguration<UserLoginLog>
 {
-    public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<UserLoginAudit> builder)
+    public void Configure(EntityTypeBuilder<UserLoginLog> builder)
     {
         builder.Property(x => x.LoginTime)
                .IsRequired();
@@ -33,7 +33,7 @@ public class UserLoginAuditConfiguration : IEntityTypeConfiguration<UserLoginAud
                .HasForeignKey(x => x.UserId)
                .IsRequired();
 
-        builder.ToTable("UserLoginAudits");
+        builder.ToTable("UserLoginLogs");
 #if DEBUG
         builder.HasData(SeedData.LoadUserLoginAudits());
 #endif

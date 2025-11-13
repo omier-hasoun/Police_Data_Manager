@@ -6,7 +6,7 @@ using Domain.Users;
 
 namespace Domain.Officers;
 
-public sealed class Officer : Entity
+public sealed class Officer : AuditableEntity
 {
     #region Properties
     public string FirstName { get; private set; } = string.Empty;
@@ -31,7 +31,7 @@ public sealed class Officer : Entity
     #endregion
 
     #region Constructors
-    private Officer(string firstName, string lastName, Guid departmentId, OfficerRank rank, string email, string phone, Guid inStateId, Guid id = default) : base(id)
+    private Officer(OfficerBadgeNumber badgeNumber, string firstName, string lastName, Guid departmentId, OfficerRank rank, string email, string phone, Guid inStateId, Guid id = default) : base(id)
 
     {
         this.Phone = phone;
@@ -41,6 +41,7 @@ public sealed class Officer : Entity
         this.Rank = rank;
         this.Email = email;
         this.InStateId = inStateId;
+        this.BadgeNumber = badgeNumber;
     }
 
     private Officer()
@@ -49,27 +50,11 @@ public sealed class Officer : Entity
     }
     #endregion
 
-    #region Factory Methods
-    public static Result<Officer> Create(string firstName, string lastName, Guid departmentId, OfficerRank rank, string email, string phone, Guid inStateId, Guid id = default)
+    public static Result<Officer> Create(OfficerBadgeNumber badgeNumber, string firstName, string lastName, Guid departmentId, OfficerRank rank, string email, string phone, Guid inStateId, Guid id = default)
     {
 
 
-        return new Officer(firstName, lastName, departmentId, rank, email, phone, inStateId, id);
+        return new Officer(badgeNumber, firstName, lastName, departmentId, rank, email, phone, inStateId, id);
     }
 
-    public Result<Created> AssignBadgeNumber(string value)
-    {
-        try
-        {
-            var badge = new OfficerBadgeNumber(value);
-            this.BadgeNumber = badge;
-        }
-        catch
-        {
-            return Error.Validation("Invalid badge number provided.");
-        }
-
-        return Result.Created;
-    }
-    #endregion
 }

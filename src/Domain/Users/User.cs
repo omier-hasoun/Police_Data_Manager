@@ -1,20 +1,36 @@
 
 using Domain.Officers;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Users;
 
 public sealed class User : AuditableEntity
 {
+    #region Main Properties
+
     public string Username { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
-    public bool IsActive { get; private set; } = false;
-    public TimeSpan? LockTime { get; private set; }
+    public bool IsActive { get; private set; } = true;
+    public DateTimeOffset? LockedUntil { get; private set; }
+    public DateTimeOffset? LockStartTime { get; private set; }
     public Guid OfficerId { get; private set; }
     public bool IsLocked { get; private set; }
     public int FailedLoginAttemptsCount { get; private set; }
 
+    #endregion
+
+    #region Navigation Properties
     public Officer? OfficerInfo { get; private set; }
 
+    #endregion
+
+    #region Constants
+
+    private static readonly TimeSpan DefaultLockDuration = TimeSpan.FromMinutes(15);
+
+    #endregion
+
+    #region Constructors
     private User()
     { }
 
@@ -24,26 +40,42 @@ public sealed class User : AuditableEntity
         PasswordHash = passwordHash;
         OfficerId = officerId;
         IsActive = true;
-        IsLocked = false;
-        FailedLoginAttemptsCount = 0;
+    }
+    #endregion
+
+    public static Result<User> Create(string username, string passwordPlainText, Guid officerId, Guid id = default)
+    {
+        var hasher = new PasswordHasher<User>();
+
+        // create a user with an empty password hash first so we can use the instance for hashing context
+        var user = new User(username, string.Empty, officerId, id);
+
+        string passwordHash = hasher.HashPassword(user, passwordPlainText);
+
+        user.PasswordHash = passwordHash;
+
+        return user;
+    }
+
+
+    public void IncrementFailedLoginAttempts()
+    {
+        FailedLoginAttemptsCount++;
     }
 
     public void LockAccount(TimeSpan? duration = null)
     {
         IsLocked = true;
-        LockTime = duration;
+        LockStartTime = DateTime.UtcNow;
+        LockedUntil = LockStartTime.Value.Add(duration ?? DefaultLockDuration);
     }
 
     public void UnlockAccount()
     {
         IsLocked = false;
-        LockTime = null;
+        LockedUntil = null;
+        LockStartTime = null;
         FailedLoginAttemptsCount = 0;
     }
 
-    public static Result<User> Create(string username, string passwordHash, Guid officerId, Guid id = default)
-    {
-
-        return new User(username, passwordHash, officerId, id);
-    }
 }

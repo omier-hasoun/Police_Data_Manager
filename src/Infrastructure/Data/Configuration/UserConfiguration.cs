@@ -8,19 +8,21 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.Property(x => x.Username)
-               .HasColumnType("VARCHAR")
-               .HasMaxLength(20)
+               .HasColumnType("VARCHAR(20)")
                .IsRequired();
 
         builder.Property(x => x.PasswordHash)
-               .HasColumnType("VARCHAR")
-               .HasMaxLength(256)
+               .HasColumnType("VARCHAR(128)")
                .IsRequired();
 
         builder.Property(x => x.IsActive)
                .IsRequired();
 
-        builder.Property(x => x.LockTime);
+        builder.Property(x => x.LockStartTime)
+               .IsRequired(false);
+
+        builder.Property(x => x.LockedUntil)
+               .IsRequired(false);
 
         builder.Property(x => x.IsLocked)
                .IsRequired();

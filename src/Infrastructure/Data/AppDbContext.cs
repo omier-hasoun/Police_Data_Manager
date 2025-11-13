@@ -15,6 +15,16 @@ namespace Infrastructure.Data;
 public sealed class AppDbContext : DbContext, IAppDbContext
 {
 
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
+    {
+
+    }
+
+    public AppDbContext()
+    {
+    }
+
     public DbSet<Case> Cases => Set<Case>();
     public DbSet<Evidence> Evidences => Set<Evidence>();
     public DbSet<Officer> Officers => Set<Officer>();
@@ -23,24 +33,24 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     public DbSet<CaseParticipant> CaseParticipants => Set<CaseParticipant>();
     public DbSet<User> Users => Set<User>();
     public DbSet<State> States => Set<State>();
-    public DbSet<UserLoginAudit> UserLoginAudits => Set<UserLoginAudit>();
+    public DbSet<UserLoginLog> UserLoginAudits => Set<UserLoginLog>();
     public DbSet<Department> Departments => Set<Department>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken token)
     {
-        var entries = ChangeTracker.Entries<AuditableEntity>();
-        foreach (var entry in entries)
-        {
-            // e.g. set audit fields
-            if (entry.State == EntityState.Added)
-            {
-                entry.Entity.ORMCreated("omier");
-            }
-            else if (entry.State == EntityState.Modified)
-            {
-                entry.Entity.ORMModified("omier");
-            }
-        }
+        // var entries = ChangeTracker.Entries<AuditableEntity>();
+        // foreach (var entry in entries)
+        // {
+        //     // e.g. set audit fields
+        //     if (entry.State == EntityState.Added)
+        //     {
+        //         entry.Entity.SetCreated("omier");
+        //     }
+        //     else if (entry.State == EntityState.Modified)
+        //     {
+        //         entry.Entity.SetModified("omier");
+        //     }
+        // }
 
         return await base.SaveChangesAsync(token);
     }
@@ -48,17 +58,6 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-
-        // If options are already configured (for example via DI with AddDbContext), do nothing.
-        if (optionsBuilder.IsConfigured)
-        {
-            return;
-        }
-
-        // The context was not configured; throwing makes the situation explicit.
-        // Configure the DbContext externally (e.g. in Program.cs/Startup.cs using AddDbContext with a connection string)
-        // or override this method to provide configuration using public EF Core APIs.
-        throw new InvalidOperationException("The DbContextOptions are not configured. Configure the context with a connection string via AddDbContext or override OnConfiguring to provide a connection string using public APIs.");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -66,8 +65,9 @@ public sealed class AppDbContext : DbContext, IAppDbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.HasSequence<int>("OfficerBadgeNumberSeq", schema: "dbo")
-                    .StartsAt(1)
-                    .IncrementsBy(1);
+                    .StartsAt(10000)
+                    .IncrementsBy(1)
+                    .IsCyclic();
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EntityConfiguration).Assembly);
     }

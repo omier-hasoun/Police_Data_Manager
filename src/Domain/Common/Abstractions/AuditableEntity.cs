@@ -1,14 +1,14 @@
 
-using System.ComponentModel;
 
 namespace Domain.Common.Abstractions;
 
-public abstract class AuditableEntity : Entity
+public abstract class AuditableEntity : SoftDeletableEntity
 {
     public DateTimeOffset CreatedAtUtc { get; private set; }
-    public string CreatedBy { get; private set; } = string.Empty;
+    public string CreatedByUsername { get; private set; } = string.Empty;
     public DateTimeOffset? LastModifiedAtUtc { get; private set; }
-    public string? LastModifiedBy { get; private set; }
+    public string? LastModifiedByUsername { get; private set; }
+
 
     private AuditableEntity()
     {
@@ -18,17 +18,17 @@ public abstract class AuditableEntity : Entity
     {
     }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public void ORMModified(string username)
+    public void SetModified(string username)
     {
-        this.LastModifiedBy = username;
+        this.LastModifiedByUsername = username;
         this.LastModifiedAtUtc = DateTimeOffset.UtcNow;
     }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public void ORMCreated(string username)
+    public void SetCreated(string username)
     {
-        this.CreatedBy = username;
+        this.CreatedByUsername = username;
         this.CreatedAtUtc = DateTimeOffset.UtcNow;
     }
+
+
 }

@@ -1,44 +1,64 @@
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using DotNetEnv;
-
+using API.Config;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Load(PathHelper.GetEnvFilePath());
-
 builder.Configuration.AddEnvironmentVariables();
 
-var dbHost = builder.Configuration["DB_HOST"];
-var dbName = builder.Configuration["DB_NAME"];
-var dbUser = builder.Configuration["DB_USER"];
-var dbPassword = builder.Configuration["DB_PASSWORD"];
-var encrypt = builder.Configuration["Encrypt"];
-var trustServerCertificate = builder.Configuration["TRUST_SERVER_CERTIFICATE"];
-
-var connectionString = $"Server={dbHost};Database={dbName};User Id={dbUser};Password={dbPassword};Encrypt={encrypt};TrustServerCertificate={trustServerCertificate};";
+var connString = new ConnectionStringReader().GetConnectionString();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(connString);
 });
 
-using (var context = new AppDbContext())
+var jwtIssuer = builder.Configuration["JWT_ISSUER"] ?? throw new InvalidOperationException();
+var jwtAudience = builder.Configuration["JWT_AUDIENCE"] ?? throw new InvalidOperationException();
+var jwtKey = builder.Configuration["JWT_KEY"] ?? throw new InvalidOperationException();
+
+builder.Services.AddAuthentication(options =>
 {
-    await context.Database.EnsureCreatedAsync();
-    await context.Database.CanConnectAsync();
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidAudience = jwtAudience,
+        ValidIssuer = jwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey
+        (Encoding.UTF8.GetBytes(jwtKey)),
 
 
-}
+    };
+});
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await db.Database.EnsureCreatedAsync();
+        await db.Database.CanConnectAsync();
+    }
+
     app.UseDeveloperExceptionPage();
 }
-
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 app.Run();

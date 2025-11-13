@@ -1,7 +1,7 @@
 
 namespace Domain.Users;
 
-public sealed class UserLoginAudit : Entity
+public sealed class UserLoginLog : Entity
 {
     public Guid UserId { get; private set; }
     public DateTimeOffset LoginTime { get; private set; }
@@ -13,12 +13,12 @@ public sealed class UserLoginAudit : Entity
 
     public User? UserInfo { get; private set; }
 
-    private UserLoginAudit()
+    private UserLoginLog()
     {
 
     }
 
-    private UserLoginAudit(Guid userId, string username, bool isSuccessful, string ipAddress, string deviceInfo, string? failureReason = null, Guid id = default) : base(id)
+    private UserLoginLog(Guid userId, string username, bool isSuccessful, string ipAddress, string deviceInfo, string? failureReason = null, Guid id = default) : base(id)
     {
 
         this.UserId = userId;
@@ -30,10 +30,10 @@ public sealed class UserLoginAudit : Entity
         this.LoginTime = DateTimeOffset.UtcNow;
     }
 
-    public static UserLoginAudit Create(Guid userId, string username, bool isSuccessful, string ipAddress, string deviceInfo, string? failureReason = null, Guid id = default)
+    public static Result<UserLoginLog> Create(Guid userId, string username, bool isSuccessful, string ipAddress, string deviceInfo, string? failureReason = null, Guid id = default)
     {
 
 
-        return new UserLoginAudit(userId, username, isSuccessful, ipAddress, deviceInfo, failureReason, id);
+        return new UserLoginLog(userId, username, isSuccessful, ipAddress, deviceInfo, failureReason, id);
     }
 }

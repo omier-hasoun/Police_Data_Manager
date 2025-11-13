@@ -17,7 +17,7 @@ public interface IAppDbContext
     public DbSet<CaseParticipant> CaseParticipants { get; }
     public DbSet<User> Users { get; }
     public DbSet<State> States { get; }
-    public DbSet<UserLoginAudit> UserLoginAudits { get; }
+    public DbSet<UserLoginLog> UserLoginAudits { get; }
     public DbSet<Department> Departments { get; }
 
     Task<int> SaveChangesAsync(CancellationToken token);

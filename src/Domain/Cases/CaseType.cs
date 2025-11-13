@@ -2,26 +2,26 @@ namespace Domain.Cases;
 
 public enum CaseType
 {
-    PersonalAssault = 1,     
+    PersonalAssault = 1,
 
-    Homicide,    
+    Homicide,
 
-    PropertyCrime,        
+    PropertyCrime,
 
     // قضايا المخدرات
     DrugRelated,
 
     // القضايا المرورية
-    TrafficViolation, 
+    TrafficViolation,
 
     // القضايا الإلكترونية
-    CyberCrime,           
+    CyberCrime,
 
     // القضايا الأخلاقية أو الجنسية
-    MoralCrime,         
+    MoralCrime,
 
     // القضايا العامة والنظام
-    PublicOrder,          
+    PublicOrder,
 
     // القضايا الاقتصادية والمالية
     FinancialCrime,
@@ -29,7 +29,8 @@ public enum CaseType
     // قضايا مفقودين وخطف
     MissingOrKidnapping,
 
+    Theft,
     // قضايا أخرى عامة
-    Other
-}
+    Other,
 
+}

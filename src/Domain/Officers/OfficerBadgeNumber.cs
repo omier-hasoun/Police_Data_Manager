@@ -5,19 +5,17 @@ namespace Domain.Officers;
 
 public sealed record OfficerBadgeNumber
 {
-    public static Regex badgeNumberPattern = new(@"^[A-Z]{3}-\d{6}$");// pattern is StateCode-sequentialNumber e.g. NYC-123456
-    public string Value { get; set; } = string.Empty;
+    public uint Value { get; }
 
-    public OfficerBadgeNumber(string value)
+    public OfficerBadgeNumber(uint value)
     {
 
-        if (value is null || !badgeNumberPattern.IsMatch(value))
+        if (value == default)
         {
-            throw new ArgumentException("Badge number format is invalid. Expected format is AAA-123456.", nameof(value));
+            throw new ArgumentException("the provided badge number cannot be 0");
         }
 
         this.Value = value;
-
     }
 
 }
