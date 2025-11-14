@@ -25,7 +25,7 @@ public class EvidenceConfiguration : IEntityTypeConfiguration<Evidence>
 
         builder.ToTable("Evidences");
 #if DEBUG
-        builder.HasData(SeedData.LoadEvidences());
+        // builder.HasData(SeedData.LoadEvidences());
 #endif
     }
 

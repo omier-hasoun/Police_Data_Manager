@@ -1,5 +1,6 @@
 ﻿
 
+using Domain.Cases;
 using Domain.Officers.Departments;
 using Domain.States;
 using Domain.Users;
@@ -28,6 +29,8 @@ public sealed class Officer : AuditableEntity
     public User? UserInfo { get; private set; }
     public State? InState { get; private set; }
     public Department? Department { get; private set; }
+    public ICollection<Case> AssignedCases { get; set; }
+
     #endregion
 
     #region Constructors

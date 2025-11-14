@@ -35,7 +35,7 @@ public class UserLoginLogConfiguration : IEntityTypeConfiguration<UserLoginLog>
 
         builder.ToTable("UserLoginLogs");
 #if DEBUG
-        builder.HasData(SeedData.LoadUserLoginAudits());
+        // builder.HasData(SeedData.LoadUserLoginAudits());
 #endif
     }
 

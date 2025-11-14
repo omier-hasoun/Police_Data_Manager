@@ -22,7 +22,7 @@ public class WitnessConfiguration : IEntityTypeConfiguration<Witness>
 
         builder.ToTable("Witnesses");
 #if DEBUG
-        builder.HasData(SeedData.LoadWitnesses());
+        // builder.HasData(SeedData.LoadWitnesses());
 #endif
     }
 

@@ -17,7 +17,7 @@ public class StateConfiguration : IEntityTypeConfiguration<State>
 
         builder.ToTable("States");
 #if DEBUG
-        builder.HasData(SeedData.LoadStates());
+        // builder.HasData(SeedData.LoadStates());
 #endif
     }
 

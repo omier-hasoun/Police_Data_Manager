@@ -45,6 +45,9 @@ public class CaseConfiguration : IEntityTypeConfiguration<Case>
         builder.HasIndex(x => x.IncidentDate)
                .HasDatabaseName("IX_IncidentDate");
 
+        builder.HasMany(x => x.AssignedOfficers)
+               .WithMany(x => x.AssignedCases);
+
         builder.Ignore(x => x.Accuseds);// they will be filtered from the participants field collection
         builder.Ignore(x => x.Perpetrators);
         builder.Ignore(x => x.Suspects);
@@ -75,7 +78,7 @@ public class CaseConfiguration : IEntityTypeConfiguration<Case>
             );
 
 #if DEBUG
-        builder.HasData(SeedData.LoadCases());
+        // builder.HasData(SeedData.LoadCases());
 #endif
     }
 

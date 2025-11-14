@@ -25,7 +25,7 @@ public class CaseParticipantConfiguration : IEntityTypeConfiguration<CasePartici
 
         builder.ToTable("CaseParticipants");
 #if DEBUG
-        builder.HasData(SeedData.LoadCaseParticipants());
+        // builder.HasData(SeedData.LoadCaseParticipants());
 #endif
 
     }

@@ -1,5 +1,7 @@
+using System.Collections;
 using Domain.Cases.Evidences;
 using Domain.Cases.Witnesses;
+using Domain.Officers;
 
 namespace Domain.Cases;
 
@@ -16,8 +18,9 @@ public sealed class Case : AuditableEntity
     public DateTimeOffset? InvestigationStartedAt { get; private set; } = null;
     public DateTimeOffset? ClosedAt { get; private set; } = null;
 
-    public ICollection<Evidence> Evidences { get; private set; }
-    public ICollection<CaseParticipant> Participants { get; private set; }
+    public ICollection<Officer> AssignedOfficers { get; private set; } = [];
+    public ICollection<Evidence> Evidences { get; private set; } = [];
+    public ICollection<CaseParticipant> Participants { get; private set; } = [];
     public ICollection<CaseParticipant> Accuseds
     {
         get
@@ -47,7 +50,7 @@ public sealed class Case : AuditableEntity
             return Participants.Where(p => p.Role == CaseParticipantRole.Victim).ToList();
         }
     }
-    public ICollection<Witness> Witnesses { get; private set; }
+    public ICollection<Witness> Witnesses { get; private set; } = [];
     #endregion
 
     #region Constructors

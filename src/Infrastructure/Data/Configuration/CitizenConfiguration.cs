@@ -53,7 +53,7 @@ public class CitizenConfiguration : IEntityTypeConfiguration<Citizen>
                 );
             });
 #if DEBUG
-        builder.HasData(SeedData.LoadCitizens());
+        // builder.HasData(SeedData.LoadCitizens());
 #endif
     }
 

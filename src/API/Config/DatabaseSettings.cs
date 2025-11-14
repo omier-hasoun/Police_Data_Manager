@@ -2,9 +2,9 @@ using Microsoft.Data.SqlClient;
 
 namespace API.Config;
 
-public static class DatabaseConnectionStringProvider
+public static class DatabaseSettings
 {
-    public static string GetRequired(IConfiguration configuration)
+    public static string GetConnectionString(IConfiguration configuration)
     {
         var connString = new SqlConnectionStringBuilder
         {

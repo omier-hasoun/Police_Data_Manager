@@ -38,7 +38,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.ToTable("Users");
 #if DEBUG
-        builder.HasData(SeedData.LoadUsers());
+       // builder.HasData(SeedData.LoadUsers());
 #endif
     }
 

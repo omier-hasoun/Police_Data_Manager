@@ -51,7 +51,7 @@ public class OfficerConfiguration : IEntityTypeConfiguration<Officer>
 
         builder.ToTable("Officers");
 #if DEBUG
-        builder.HasData(SeedData.LoadOfficers());
+        // builder.HasData(SeedData.LoadOfficers());
 #endif
     }
 

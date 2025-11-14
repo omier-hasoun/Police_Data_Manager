@@ -13,7 +13,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
 
         builder.ToTable("Departments");
 #if DEBUG
-        builder.HasData(SeedData.LoadDepartments());
+        // builder.HasData(SeedData.LoadDepartments());
 #endif
     }
 
