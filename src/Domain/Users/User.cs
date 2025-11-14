@@ -16,6 +16,8 @@ public sealed class User : AuditableEntity
     public Guid OfficerId { get; private set; }
     public bool IsLocked { get; private set; }
     public int FailedLoginAttemptsCount { get; private set; }
+    public List<string> Permissions { get; set; }
+    public List<string> Roles { get; set; }
 
     #endregion
 
@@ -45,14 +47,7 @@ public sealed class User : AuditableEntity
 
     public static Result<User> Create(string username, string passwordPlainText, Guid officerId, Guid id = default)
     {
-        var hasher = new PasswordHasher<User>();
-
-        // create a user with an empty password hash first so we can use the instance for hashing context
         var user = new User(username, string.Empty, officerId, id);
-
-        string passwordHash = hasher.HashPassword(user, passwordPlainText);
-
-        user.PasswordHash = passwordHash;
 
         return user;
     }

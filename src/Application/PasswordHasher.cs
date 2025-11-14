@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 
 namespace Application;
 
-public sealed partial class PasswordHasher : IPasswordHasher
+public sealed class PasswordHasher : IPasswordHasher
 {
     private const int SaltSize = 16; // 128 bit
     private const int HashSize = 32; // 256 bit

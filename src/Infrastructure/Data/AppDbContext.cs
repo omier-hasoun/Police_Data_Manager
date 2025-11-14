@@ -7,7 +7,6 @@ using Domain.Cases.Witnesses;
 using Domain.Users;
 using Domain.States;
 using Domain.Officers.Departments;
-using Domain.Common.Abstractions;
 using Infrastructure.Data.Configuration;
 
 namespace Infrastructure.Data;

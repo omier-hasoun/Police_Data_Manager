@@ -1,7 +1,7 @@
 using Domain.Officers;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace Infrastructure.Interceptors;
+namespace Infrastructure.Data.Interceptors;
 
 public class OfficerSaveChangesInterceptor : SaveChangesInterceptor
 {

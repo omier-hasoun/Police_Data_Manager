@@ -1,29 +1,26 @@
 using Domain.Common.Abstractions;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace Infrastructure.Interceptors;
+namespace Infrastructure.Data.Interceptors;
 
-public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
+public sealed class SoftDeletableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
         if (eventData.Context is null)
             return ValueTask.FromResult(result);
 
-        var entries = eventData.Context.ChangeTracker.Entries<AuditableEntity>();
+        var entries = eventData.Context.ChangeTracker.Entries();
 
         foreach (var entry in entries)
         {
-            if (entry.State == EntityState.Added)
+            if (entry is not { State: EntityState.Deleted, Entity: SoftDeletableEntity entity })
             {
-                // entry.Entity.SetCreated("");
                 continue;
             }
+            entry.State = EntityState.Modified;
 
-            if (entry.State == EntityState.Modified)
-            {
-                // entry.Entity.SetModified("")
-            }
+            // TODO: Implement entity.Delete() when Users manager is defined.
         }
         // do i need to return base.SavingChangesAsync if i have multiple saveChangesInterceptors ?
 
