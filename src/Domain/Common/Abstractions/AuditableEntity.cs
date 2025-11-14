@@ -20,12 +20,14 @@ public abstract class AuditableEntity : SoftDeletableEntity
 
     public void SetModified(string username)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(username);
         this.LastModifiedByUsername = username;
         this.LastModifiedAtUtc = DateTimeOffset.UtcNow;
     }
 
     public void SetCreated(string username)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(username);
         this.CreatedByUsername = username;
         this.CreatedAtUtc = DateTimeOffset.UtcNow;
     }

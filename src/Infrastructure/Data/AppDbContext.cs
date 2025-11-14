@@ -30,26 +30,12 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     public DbSet<Citizen> Citizens => Set<Citizen>();
     public DbSet<Witness> Witnesses => Set<Witness>();
     public DbSet<CaseParticipant> CaseParticipants => Set<CaseParticipant>();
-    public DbSet<User> Users => Set<User>();
     public DbSet<State> States => Set<State>();
     public DbSet<UserLoginLog> UserLoginAudits => Set<UserLoginLog>();
     public DbSet<Department> Departments => Set<Department>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken token)
     {
-        // var entries = ChangeTracker.Entries<AuditableEntity>();
-        // foreach (var entry in entries)
-        // {
-        //     // e.g. set audit fields
-        //     if (entry.State == EntityState.Added)
-        //     {
-        //         entry.Entity.SetCreated("omier");
-        //     }
-        //     else if (entry.State == EntityState.Modified)
-        //     {
-        //         entry.Entity.SetModified("omier");
-        //     }
-        // }
 
         return await base.SaveChangesAsync(token);
     }
@@ -65,8 +51,7 @@ public sealed class AppDbContext : DbContext, IAppDbContext
 
         modelBuilder.HasSequence<int>("OfficerBadgeNumberSeq", schema: "dbo")
                     .StartsAt(10000)
-                    .IncrementsBy(1)
-                    .IsCyclic();
+                    .IncrementsBy(1);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EntityConfiguration).Assembly);
     }

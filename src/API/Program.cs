@@ -1,6 +1,8 @@
 using Infrastructure.Data;
 using DotNetEnv.Configuration;
 using API.DependencyInjection;
+using Infrastructure.DependencyInjection;
+using Application.DependencyInjection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,9 @@ builder.Configuration.AddEnvironmentVariables()
                      .AddDotNetEnv(PathHelper.GetEnvFilePath());
 
 builder.Services.AddApiServices(builder.Configuration);
+builder.Services.AddInfrastructureServices();
+builder.Services.AddApplicationServices();
+
 
 var app = builder.Build();
 
@@ -22,6 +27,8 @@ if (app.Environment.IsDevelopment())
     }
 
     app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 // else
 // {
@@ -29,7 +36,12 @@ if (app.Environment.IsDevelopment())
 // }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
+
 
 app.Run();

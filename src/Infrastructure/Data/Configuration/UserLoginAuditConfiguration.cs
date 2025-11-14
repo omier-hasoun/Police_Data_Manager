@@ -28,11 +28,6 @@ public class UserLoginLogConfiguration : IEntityTypeConfiguration<UserLoginLog>
                .HasMaxLength(20)
                .IsRequired();
 
-        builder.HasOne(x => x.UserInfo)
-               .WithMany()
-               .HasForeignKey(x => x.UserId)
-               .IsRequired();
-
         builder.ToTable("UserLoginLogs");
 #if DEBUG
         // builder.HasData(SeedData.LoadUserLoginAudits());

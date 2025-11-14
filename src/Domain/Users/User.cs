@@ -1,6 +1,5 @@
 
 using Domain.Officers;
-using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Users;
 

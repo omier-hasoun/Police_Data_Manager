@@ -5,6 +5,12 @@ namespace Infrastructure.Data.Interceptors;
 
 public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
+    private readonly ICurrentUserService _currentUser;
+
+    public AuditableEntitySaveChangesInterceptor(ICurrentUserService currentUser)
+    {
+        _currentUser = currentUser;
+    }
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
         if (eventData.Context is null)
@@ -16,16 +22,15 @@ public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesIntercept
         {
             if (entry.State == EntityState.Added)
             {
-                // entry.Entity.SetCreated("");
+                entry.Entity.SetCreated(_currentUser.Username);
                 continue;
             }
 
             if (entry.State == EntityState.Modified)
             {
-                // entry.Entity.SetModified("")
+                entry.Entity.SetModified(_currentUser.Username);
             }
         }
-        // do i need to return base.SavingChangesAsync if i have multiple saveChangesInterceptors ?
 
         return ValueTask.FromResult(result);
     }

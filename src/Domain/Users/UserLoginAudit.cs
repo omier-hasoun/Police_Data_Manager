@@ -11,8 +11,6 @@ public sealed class UserLoginLog : Entity
     public string DeviceInfo { get; private set; } = string.Empty;
     public string? FailureReason { get; private set; }
 
-    public User? UserInfo { get; private set; }
-
     private UserLoginLog()
     {
 

@@ -3,26 +3,25 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Infrastructure.Data.Interceptors;
 
-public sealed class SoftDeletableEntitySaveChangesInterceptor : SaveChangesInterceptor
+public sealed class SoftDeletableEntitySaveChangesInterceptor(ICurrentUserService currentUser) : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
         if (eventData.Context is null)
             return ValueTask.FromResult(result);
 
-        var entries = eventData.Context.ChangeTracker.Entries();
+        var entries = eventData.Context.ChangeTracker.Entries<SoftDeletableEntity>();
 
         foreach (var entry in entries)
         {
-            if (entry is not { State: EntityState.Deleted, Entity: SoftDeletableEntity entity })
+            if (entry is not { State: EntityState.Deleted })
             {
                 continue;
             }
             entry.State = EntityState.Modified;
 
-            // TODO: Implement entity.Delete() when Users manager is defined.
+            entry.Entity.Delete(currentUser.Username);
         }
-        // do i need to return base.SavingChangesAsync if i have multiple saveChangesInterceptors ?
 
         return ValueTask.FromResult(result);
     }

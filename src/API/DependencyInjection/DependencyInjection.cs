@@ -55,6 +55,8 @@ public static class DependencyInjection
         });
 
         services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
+        services.AddEndpointsApiExplorer(); // Required for minimal APIs
+        services.AddSwaggerGen();
 
         return services;
     }

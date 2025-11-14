@@ -15,7 +15,6 @@ public interface IAppDbContext
     public DbSet<Citizen> Citizens { get; }
     public DbSet<Witness> Witnesses { get; }
     public DbSet<CaseParticipant> CaseParticipants { get; }
-    public DbSet<User> Users { get; }
     public DbSet<State> States { get; }
     public DbSet<UserLoginLog> UserLoginAudits { get; }
     public DbSet<Department> Departments { get; }
